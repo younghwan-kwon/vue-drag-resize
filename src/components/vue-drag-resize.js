@@ -168,7 +168,9 @@ export default {
             right: null,
             bottom: null,
             minWidth: this.minw,
-            minHeight: this.minh
+            minHeight: this.minh,
+            count: 0,
+            childElement: null
         }
     },
 
@@ -257,11 +259,12 @@ export default {
                 this.stickMove(ev);
             }
             if (this.bodyDrag) {
-                this.bodyMove(ev)
+                this.bodyMove(ev);
             }
         },
 
         up(ev) {
+            this.$store.dispatch('rect/unsetAspect', { id: this.$store.getters['rect/getActive'] });
             if (this.stickDrag) {
                 this.stickUp(ev);
             }
@@ -296,7 +299,10 @@ export default {
             }
 
             ev.stopPropagation();
-            ev.preventDefault();
+            if (this.count === 0) {
+                ev.preventDefault();
+                this.count++
+            }
 
             if (this.isDraggable) {
                 this.bodyDrag = true;
@@ -400,7 +406,7 @@ export default {
             };
         },
 
-        stickDown: function (stick, ev) {
+        stickDown: function (stick, index, ev) {
             if (!this.isResizable || !this.active) {
                 return
             }
@@ -414,7 +420,6 @@ export default {
             this.stickStartPos.bottom = this.bottom;
             this.currentStick = stick.split('');
             this.stickAxis = null;
-
             switch (this.currentStick[0]) {
                 case 'b':
                     this.stickAxis = 'y';
@@ -425,14 +430,23 @@ export default {
             }
             switch (this.currentStick[1]) {
                 case 'r':
-                    this.stickAxis = this.stickAxis === 'y' ? 'xy' : 'x';
+                    if (this.stickAxis === 'y') {
+                        this.stickAxis = 'xy';
+                        this.$store.dispatch('rect/setAspect', { id: this.$store.getters['rect/getActive'] });
+                    } else {
+                        this.stickAxis = 'x';
+                    }
                     break;
                 case 'l':
-                    this.stickAxis = this.stickAxis === 'y' ? 'xy' : 'x';
+                    if (this.stickAxis === 'y') {
+                        this.stickAxis = 'xy';
+                        this.$store.dispatch('rect/setAspect', { id: this.$store.getters['rect/getActive'] });
+                    } else {
+                        this.stickAxis = 'x';
+                    }
                     break;
             }
-
-
+            this.childElement = ev.target.parentElement.children;
             this.limits = this.calcResizeLimitation();
         },
 
@@ -561,6 +575,7 @@ export default {
             }
 
             this.$emit('resizing', this.rect);
+            this.childElement.style.fontSize = this.childElement.height
         },
 
         stickUp() {
@@ -784,6 +799,7 @@ export default {
 
         isActive(val) {
             this.active = val;
+            if (!val) this.count = 0;
         },
 
         z(val) {

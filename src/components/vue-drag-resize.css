@@ -40,3 +40,26 @@
 .vdr-stick.not-resizable{
     display: none;
 }
+.vdr > input {
+    display: block;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    z-index: 1000;
+}
+
+/* .vdr > div {
+    display: block;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    z-index: 1000;
+}
+.draggable-block-text {
+    white-space: pre-wrap;
+    display: block;
+}
+
+.draggable-block-text:focus {
+    outline: none;
+} */

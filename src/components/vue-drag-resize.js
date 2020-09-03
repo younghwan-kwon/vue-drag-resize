@@ -575,7 +575,6 @@ export default {
             }
 
             this.$emit('resizing', this.rect);
-            this.childElement.style.fontSize = this.childElement.height
         },
 
         stickUp() {

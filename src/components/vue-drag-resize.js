@@ -264,7 +264,7 @@ export default {
         },
 
         up(ev) {
-            this.$store.dispatch('rect/unsetAspect', { id: this.$store.getters['rect/getActive'] });
+            this.$emit('onAspectRatioChanged', false);
             if (this.stickDrag) {
                 this.stickUp(ev);
             }
@@ -432,7 +432,7 @@ export default {
                 case 'r':
                     if (this.stickAxis === 'y') {
                         this.stickAxis = 'xy';
-                        this.$store.dispatch('rect/setAspect', { id: this.$store.getters['rect/getActive'] });
+                        this.$emit('onAspectRatioChanged', true);
                     } else {
                         this.stickAxis = 'x';
                     }
@@ -440,7 +440,7 @@ export default {
                 case 'l':
                     if (this.stickAxis === 'y') {
                         this.stickAxis = 'xy';
-                        this.$store.dispatch('rect/setAspect', { id: this.$store.getters['rect/getActive'] });
+                        this.$emit('onAspectRatioChanged', true);
                     } else {
                         this.stickAxis = 'x';
                     }
@@ -640,7 +640,7 @@ export default {
                     this.bottom = bottom + height - newHeight;
                 }
             }
-        },
+        }
     },
 
     computed: {

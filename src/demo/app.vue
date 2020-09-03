@@ -24,6 +24,7 @@
                            v-on:deactivated="deactivateEv(index)"
                            v-on:dragging="changePosition($event, index)"
                            v-on:resizing="changeSize($event, index)"
+                           v-on:onAspectRatioChanged="changeAspectRatio($event, index)"
             >
                 <div class="filler" :style="{backgroundColor:rect.color}"></div>
             </VueDragResize>
@@ -130,6 +131,14 @@
                 this.$store.dispatch('rect/setLeft', {id: index, left: newRect.left});
                 this.$store.dispatch('rect/setWidth', {id: index, width: newRect.width});
                 this.$store.dispatch('rect/setHeight', {id: index, height: newRect.height});
+            },
+
+            changeAspectRatio(aspectRatio, index) {
+                if (aspectRatio) {
+                    this.$store.dispatch('rect/setAspect', {id: index});
+                } else {
+                    this.$store.dispatch('rect/unsetAspect', { id: index });
+                }
             }
         }
     }
